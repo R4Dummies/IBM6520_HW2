@@ -1,0 +1,79 @@
+---
+title: "IBM6520_HW2"
+author: "Ricky Woznichak"
+date: "2025-02-18"
+output: html_document
+output: PDF
+---
+```{r}
+library(fpp3)
+```
+
+# Add Question
+```{r}
+## United States ##
+global_economy |>
+filter (Country == 'United States') |>
+autoplot(GDP)
+```
+
+# Add Question
+```{r}
+## Per Capita Adjustments
+global_economy |>
+filter (Country == 'United States') |>
+autoplot(GDP/ Population) +
+labs(title= "GDP per capita", y = "$US")
+
+```
+
+# Add Question
+```{r}
+aus_production |>
+autoplot(Gas)
+```
+
+# Add Question
+```{r}
+lambda <- aus_production |>
+features(Gas, features = guerrero) |>
+pull(lambda_guerrero)
+aus_production |>
+autoplot(box_cox(Gas, lambda)) +
+labs(y = "",
+title = paste("Transformed gas production with lambda = ", round(lambda,2)))
+```
+
+# Consider the last five years of the Gas data from aus_production.
+```{r}
+gas <- tail(aus_production, 5*4) |> select(Gas)
+gas |>
+    autoplot(Gas)
+```
+# b. Use classical_decomposition 
+
+```{r}
+aus_production |>
+model(classical_decomposition(Gas, type = "multiplicative")
+) |>
+components() |>
+autoplot() +
+labs(title = "Classical additive decomposition of total
+Aus Gas Production")
+```
+
+# c. Do the results support the graphical interpretation from part a?  (12.5 points)
+Yes, the result support the upward trend and same seasonal pattern.
+
+#d. Compute and plot the seasonally adjusted data.  (12.5 points)
+```{r}
+dcmp <- gas |>
+    model(stl = STL(Gas))
+ components(dcmp) |>
+    as_tsibble() |>
+    autoplot(Gas, colour = "red") +
+   geom_line(aes(y=season_adjust), colour = "blue") +
+     labs(y = "Gas Production",
+         title = "Seasonally Adjusted Gas Production")
+```
+
