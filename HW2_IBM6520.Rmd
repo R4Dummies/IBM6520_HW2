@@ -1,0 +1,10 @@
+---
+title: "IBM6520_HW2"
+author: "Ricky Woznichak"
+date: "2025-02-18"
+output: html_document
+---
+```{r}
+library(fpp3)
+```
+
