@@ -2,8 +2,7 @@
 title: "IBM6520_HW2"
 author: "Ricky Woznichak"
 date: "2025-02-18"
-output: html_document
-output: PDF
+output: html_output
 ---
 ```{r}
 library(fpp3)
