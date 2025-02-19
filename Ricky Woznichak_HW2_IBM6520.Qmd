@@ -1,0 +1,139 @@
+---
+title: "IBM6520_HW2"
+author: "Ricky Woznichak"
+date: "2025-02-18"
+output: html_output
+embed-resources: true
+theme: yeti
+toc: true
+toc-location: left
+toc-title: Assignment Questions
+number-sections: false
+number-depth: 4
+scrollable: true
+
+format:
+  html:
+    css: styles.css
+
+execute: 
+  warning: false
+  message: false
+  code-fold: true
+---
+
+```{r echo=FALSE}
+library(fpp3)
+```
+
+# Question 1
+
+## Part A:
+
+> United States GDP from global_economy
+
+```{r}
+#| code-fold: true
+## United States ##
+global_economy |>
+filter (Country == 'United States') |>
+autoplot(GDP)
+```
+
+## Part A2:
+
+> United States GDP from global_economy adjusted for per capita
+
+```{r}
+#| code-fold: true
+## Per Capita Adjustments
+global_economy |>
+filter (Country == 'United States') |>
+autoplot(GDP/ Population) +
+labs(title= "GDP per capita", y = "$US")
+
+```
+
+::: callout-note
+### Key Takeaways:
+
+The U.S. GDP has been increasing year over year since 1960, but took a sharp dive in 2008, likely dude to the financial crisis; but soon recovered and continued to soar upward. I'm curious to see the effects of the 2020 Covid pandemic.
+:::
+
+## Part B:
+
+> Gas production from aus_production
+
+```{r}
+#| code-fold: true
+aus_production |>
+autoplot(Gas)
+```
+
+::: callout-note
+### Key Takeaways:
+
+Australia's gasoline productions was almost non-existent until 1970, then ramped up significantly in 1980, and continued to climb. It is likely Australia began attempts to become less dependent on foreign oil as gasoline prices surged in the 70's due to the global shortage of the time. I am seeing seasonal production fluctuations, likely due to seasonal needs and production schedules.
+:::
+# Question 2
+>Consider the last five years of the Gas data from aus_production.
+
+```{r}
+#| code-fold: true
+lambda <- aus_production |>
+features(Gas, features = guerrero) |>
+pull(lambda_guerrero)
+aus_production |>
+autoplot(box_cox(Gas, lambda)) +
+labs(y = "",
+title = paste("Transformed gas production with lambda = ", round(lambda,2)))
+```
+## Part A:
+> Plot a Time Series - Consider the last five years of the Gas data from aus_production. Identify seasonal fluctuations and/or a trend-cycle
+
+```{r}
+#| code-fold: true
+gas <- tail(aus_production, 5*4) |> select(Gas)
+gas |>
+    autoplot(Gas)
+```
+::: callout-note
+Gas production exhibits a recurring seasonal pattern each quarter, alongside an overall upward trend. In Q1, production rises sharply, followed by a slight increase in Q2, reaching its peak. Q3 experiences a sudden decline, while Q4 hits the lowest point before the cycle repeats.
+:::
+## Part B:
+
+> Use classical demposotion with type=multiplicative to calculate the trend-cycle and seasonal indices
+
+```{r}
+#| code-fold: true
+#| warning: false
+aus_production |>
+model(classical_decomposition(Gas, type = "multiplicative")
+) |>
+components() |>
+autoplot() +
+labs(title = "Classical additive decomposition of total
+Aus Gas Production")
+```
+## Part C:
+
+::: callout-note
+Do the results support the graphical interpretation from Part A?
+
+Yes, the decomposed chart shows a steady fluctuation of gasoline production with an upward trend. There are seasonal movements with random fluctuations likely due to external factors.
+:::
+## Part D:
+
+> Compute and plot the seasonally adjusted data.
+
+```{r}
+#| code-fold: true
+dcmp <- gas |>
+    model(stl = STL(Gas))
+ components(dcmp) |>
+    as_tsibble() |>
+    autoplot(Gas, colour = "red") +
+   geom_line(aes(y=season_adjust), colour = "blue") +
+     labs(y = "Gas Production",
+         title = "Seasonally Adjusted Gas Production")
+```
