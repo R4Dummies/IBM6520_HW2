@@ -123,7 +123,6 @@ Do the results support the graphical interpretation from Part A?
 Yes, the decomposed chart shows a steady fluctuation of gasoline production with an upward trend. There are seasonal movements with random fluctuations likely due to external factors.
 :::
 ## Part D:
-
 > Compute and plot the seasonally adjusted data.
 
 ```{r}
