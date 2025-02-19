@@ -57,7 +57,7 @@ labs(title= "GDP per capita", y = "$US")
 ::: callout-note
 ### Key Takeaways:
 
-The U.S. GDP has been increasing year over year since 1960, but took a sharp dive in 2008, likely dude to the financial crisis; but soon recovered and continued to soar upward. I'm curious to see the effects of the 2020 Covid pandemic.
+The U.S. GDP has been increasing year over year since 1960, but took a sharp dive in 2008, likely due to the financial crisis; but soon recovered and continued to soar upward. I'm curious to see the effects of the 2020 Covid pandemic.
 :::
 
 ## Part B:
